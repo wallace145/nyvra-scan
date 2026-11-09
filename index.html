@@ -1,0 +1,81 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100b18">
+  <title>Nyvra Scan</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <a class="brand" href="#" id="homeLink"><span class="brand-mark">N</span><span>NYVRA <b>SCAN</b><small>READ BEYOND THE FRAME</small></span></a>
+    <nav><a href="#catalogo">Catálogo</a><a href="#catalogo" id="adminNav" hidden>Administración</a></nav>
+    <div class="top-actions"><span id="userLabel" class="user-label"></span><button class="btn btn-ghost" id="authButton">Iniciar sesión</button></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i> TU PRÓXIMA HISTORIA COMIENZA AQUÍ</span>
+        <h1>Historias que<br><em>te atrapan.</em></h1>
+        <p>Descubre manga, manhwa y manhua. Sumérgete en cada página y encuentra tu próxima obsesión.</p>
+        <a class="btn btn-primary" href="#catalogo">Explorar catálogo <span>↗</span></a>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-glyph">N</div><div class="hero-caption">NYVRA<br><b>UNIVERSE</b></div></div>
+    </section>
+
+    <section class="catalog-section" id="catalogo">
+      <div class="section-heading"><div><span class="eyebrow">DESCUBRE TU SIGUIENTE LECTURA</span><h2>Catálogo <em>Nyvra</em></h2></div><div class="filters"><input id="searchInput" type="search" placeholder="Buscar una obra..."><select id="typeFilter"><option value="">Todos los formatos</option><option value="Manga">Manga</option><option value="Manhwa">Manhwa</option><option value="Manhua">Manhua</option></select></div></div>
+      <div id="catalogGrid" class="catalog-grid"><div class="empty-state">Conectando con Nyvra Scan...</div></div>
+    </section>
+
+    <section class="admin-section" id="adminPanel" hidden>
+      <div class="section-heading"><div><span class="eyebrow">ESPACIO PRIVADO</span><h2>Panel de <em>administración</em></h2><p class="muted">Los administradores pueden gestionar obras y capítulos.</p></div></div>
+      <div class="admin-grid">
+        <form id="seriesForm" class="panel">
+          <h3>Agregar una obra</h3>
+          <label>Título<input name="title" required maxlength="160" placeholder="Nombre de la obra"></label>
+          <label>Tipo<select name="content_type" required><option value="manhwa">Manhwa</option><option value="manga">Manga</option><option value="manhua">Manhua</option></select></label>
+          <label>Géneros<input name="genres" placeholder="Acción, Romance, Fantasía"></label>
+          <label>Descripción<textarea name="description" rows="3" placeholder="Sinopsis..."></textarea></label>
+          <label>URL de portada<input name="cover_url" type="url" placeholder="https://..."></label>
+          <label class="checkline"><input name="is_published" type="checkbox"> Publicar en el catálogo</label>
+          <button class="btn btn-primary" type="submit">Guardar obra</button>
+        </form>
+        <form id="chapterForm" class="panel">
+          <h3>Agregar capítulo</h3>
+          <label>Obra<select name="series_id" id="seriesSelect" required><option value="">Selecciona una obra</option></select></label>
+          <label>Número de capítulo<input name="chapter_number" type="number" min="0" step="0.1" required placeholder="1"></label>
+          <label>Título (opcional)<input name="title" placeholder="Capítulo 1"></label>
+          <label>Imágenes del capítulo<input name="pages" type="file" accept="image/*" multiple required></label>
+          <p class="hint">Selecciona las imágenes en el orden de lectura. Se mostrarán en vertical.</p>
+          <label class="checkline"><input name="publish" type="checkbox"> Publicar capítulo al guardar</label>
+          <button class="btn btn-primary" type="submit">Subir capítulo</button>
+        </form>
+      </div>
+      <div class="panel admin-list"><h3>Mis obras</h3><div id="adminSeriesList" class="admin-series-list">Inicia sesión como administrador para gestionar el catálogo.</div></div>
+    </section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="#"><span class="brand-mark">N</span><span>NYVRA <b>SCAN</b><small>READ BEYOND THE FRAME</small></span></a><span>© <span id="year"></span> Nyvra Scan · Hecho para lectores.</span></footer>
+
+  <div class="modal-backdrop" id="authModal" hidden>
+    <div class="modal">
+      <button class="modal-close" id="closeAuth" aria-label="Cerrar">×</button>
+      <span class="eyebrow">BIENVENIDO A NYVRA</span><h2>Tu próxima lectura<br><em>te espera.</em></h2>
+      <div class="tabs"><button class="tab active" data-mode="login">Iniciar sesión</button><button class="tab" data-mode="signup">Crear cuenta</button></div>
+      <form id="authForm"><label>Correo electrónico<input name="email" type="email" required autocomplete="email"></label><label>Contraseña<input name="password" type="password" required minlength="6" autocomplete="current-password"></label><button class="btn btn-primary full" id="authSubmit" type="submit">Entrar</button></form>
+      <p class="hint" id="authMessage">El registro puede requerir confirmación por correo.</p>
+    </div>
+  </div>
+
+  <div class="reader-backdrop" id="reader" hidden><div class="reader-top"><button class="btn btn-ghost" id="closeReader">← Volver</button><strong id="readerTitle">Nyvra Scan</strong></div><div class="reader-pages" id="readerPages"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
